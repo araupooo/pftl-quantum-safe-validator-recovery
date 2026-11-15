@@ -1,0 +1,53 @@
+=== fresh-clone verification ===
+copy: clean copy of the pack in /tmp/pftl-fresh-clone (no hidden local state)
+=== sha256sum -c DIGESTS.txt ===
+./README.md: OK
+./claims.md: OK
+./findings.md: OK
+./index.html: OK
+./limitations.md: OK
+./outputs/drill_01.log: OK
+./outputs/drill_02.log: OK
+./outputs/drill_03.log: OK
+./outputs/drill_04.log: OK
+./outputs/drill_05.log: OK
+./outputs/drill_06.log: OK
+./outputs/drill_07.log: OK
+./outputs/drill_08.log: OK
+./outputs/drill_09.log: OK
+./outputs/run-summary.json: OK
+./rotation.md: OK
+./runbooks/a-signing-key-compromise.md: OK
+./runbooks/b-quorum-member-compromise.md: OK
+./runbooks/c-bridge-witness-compromise.md: OK
+./runbooks/d-validator-set-recovery.md: OK
+./runbooks/e-ledger-resync.md: OK
+./runbooks/f-amendment-state-verification.md: OK
+./scripts/common.py: OK
+./scripts/drill_01.py: OK
+./scripts/drill_02.py: OK
+./scripts/drill_03.py: OK
+./scripts/drill_04.py: OK
+./scripts/drill_05.py: OK
+./scripts/drill_06.py: OK
+./scripts/drill_07.py: OK
+./scripts/drill_08.py: OK
+./scripts/drill_09.py: OK
+./scripts/run_all.py: OK
+./sources.md: OK
+=== python3 scripts/run_all.py ===
+drill 01: PASS (6/6 passed)
+drill 02: PASS (7/7 passed)
+drill 03: PASS (8/8 passed)
+drill 04: PASS (6/6 passed)
+drill 05: PASS (6/6 passed)
+drill 06: PASS (8/8 passed)
+drill 07: PASS (17/17 passed)
+drill 08: PASS (6/6 passed)
+drill 09: PASS (8/8 passed)
+OVERALL: PASS — 72/72 checks passed, 0 failed
+Summary written to outputs/run-summary.json (timestamp-free)
+=== run-summary line ===
+OVERALL: PASS - 72 / 72 checks passed, 0 failed
+=== outputs diff vs pack (determinism check) ===
+outputs identical to pack outputs
