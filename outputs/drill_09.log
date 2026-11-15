@@ -1,0 +1,16 @@
+DRILL 09: amendment-state verification drill
+SIMULATED — no live network touched, no real keys used.
+Time model: ledger-close=4s, alert=8s, operator-ack=900s (assumed)
+DERIVED postfiatd threshold: 35*67/100=23.45 -> votes needed=24
+DERIVED upstream threshold: 35*80/100=28.00 -> votes needed=29
+[PASS] postfiatd votes needed is 24 (DERIVED) — threshold=23.45
+[PASS] upstream votes needed is 29 (DERIVED) — threshold=28.00
+[PASS] 23 votes do NOT pass under postfiatd 67% rule — 23 <= 23.45, fails
+[PASS] 24 votes pass under postfiatd 67% rule — 24 > 23.45, passes
+[PASS] 28 votes do NOT pass under upstream 80% rule — 28 <= 28.00, fails (28 is not enough, xrpl.org)
+[PASS] 29 votes pass under upstream 80% rule — 29 > 28.00, passes
+[PASS] two-week majority hold is unchanged (67% fork) — defaultAmendmentMajorityTime = 2 weeks, SystemParameters.h
+[PASS] postfiatd threshold (24) equals Cobalt quorum q=24 (DERIVED coincidence, not a claim of identity) — 24 == 24; the two rules are distinct mechanisms
+PHASE verification: read amendment table, count trusted votes: 60 s simulated
+SIMULATED verification time: 60 s
+RESULT 09: 8/8 checks passed, 0 failed

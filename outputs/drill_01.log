@@ -1,0 +1,15 @@
+DRILL 01: single validator signing-key compromise (classical)
+SIMULATED — no live network touched, no real keys used.
+Time model: ledger-close=4s, alert=8s, operator-ack=900s (assumed)
+PHASE detection: 908 s simulated
+PHASE containment: isolate validator, stop signing: 1800 s simulated
+PHASE rotation: generate new key pair offline, publish new manifest: 3600 s simulated
+PHASE recovery verification: 10 ledger closes observed: 40 s simulated
+SIMULATED total recovery time: 6348 s (1.76 h)
+[PASS] compromised key moved to Compromised state, use stopped — SP 800-57 Rev.5 §7
+[PASS] replacement is re-keying, not key update from old key — SP 800-57 Rev.5 §8.2.3
+[PASS] quorum holds with 1 validator offline — remaining=34, q=24
+[PASS] old key cannot sign after revocation manifest propagates — revocation sequence=4294967295
+[PASS] new manifest sequence > old manifest sequence — sequence monotonic
+[PASS] simulated total is finite and bounded (< 8 h simulated) — total=6348 s
+RESULT 01: 6/6 checks passed, 0 failed

@@ -1,0 +1,16 @@
+DRILL 02: single validator ML-DSA-65 key compromise
+SIMULATED — no live network touched, no real keys used.
+Time model: ledger-close=4s, alert=8s, operator-ack=900s (assumed)
+PHASE detection: 908 s simulated
+PHASE containment: suspend key (SP 800-57 §7 Suspended), stop signing: 1800 s simulated
+PHASE rotation: new ML-DSA-65 key pair, domain-separated context, publish: 3600 s simulated
+PHASE recovery verification: new key signs, old key rejected: 80 s simulated
+SIMULATED total recovery time: 6388 s (1.77 h)
+[PASS] ML-DSA-65 public key size is 1952 bytes — FIPS 204 Table 2
+[PASS] ML-DSA-65 signature size is 3309 bytes — FIPS 204 Table 2
+[PASS] quorum signature bytes for q=24 is 79416 (DERIVED 24*3309) — 24*3309=79416, whitepaper §1.11
+[PASS] old ML-DSA key rejected after rotation (PROPOSED procedure) — mirrors whitepaper height-924 stolen-key rejection
+[PASS] quorum holds with 1 validator offline — remaining=34, q=24
+[PASS] rotation uses fresh independent key, not derived from old key — SP 800-57 §8.2.3 re-keying
+[PASS] compromised key never returns to Active — SP 800-57 §8: no return to a previous phase
+RESULT 02: 7/7 checks passed, 0 failed

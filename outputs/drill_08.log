@@ -1,0 +1,14 @@
+DRILL 08: ledger re-sync drill
+SIMULATED — no live network touched, no real keys used.
+Time model: ledger-close=4s, alert=8s, operator-ack=900s (assumed)
+PHASE fetch latest validated ledger from peers: 120 s simulated
+PHASE verify ledger hashes (LedgerHashes) for 1500 ledgers: 1500 s simulated
+PHASE backfill history (low priority, simulated): 3600 s simulated
+SIMULATED total re-sync time: 5220 s (1.45 h); ledgers behind: 1500
+[PASS] latest validated ledger fetched before catching up — xrpl.org Ledger History
+[PASS] all 1500 ledger hashes verified — hashes=1500
+[PASS] tampered ledger hash would be rejected — integrity via cryptographic hashes; mismatched hash fails verification
+[PASS] server does not trust a single peer's history blindly — LedgerHashes confirm correctness and completeness
+[PASS] re-sync does not require the compromised key — fetch + hash verification use public ledger data only
+[PASS] quorum unaffected: re-syncing node does not sign until synced — node rejoins signing only after verification passes
+RESULT 08: 6/6 checks passed, 0 failed

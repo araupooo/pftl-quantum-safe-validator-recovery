@@ -1,0 +1,99 @@
+{
+  "simulated": true,
+  "deterministic": true,
+  "python": "3 stdlib only, no pip installs, no network, no real keys",
+  "time_model": "ledger-close=4s, alert=8s, operator-ack=900s (assumed); all drill timings are SIMULATED elapsed times",
+  "quorum": {
+    "validators": 35,
+    "quorum_q": 24,
+    "amendment_majority_postfiatd_percent": 67,
+    "amendment_majority_upstream_percent": 80
+  },
+  "drills": [
+    {
+      "id": "01",
+      "name": "single validator signing-key compromise (classical)",
+      "status": "PASS",
+      "checks": 6,
+      "passed": 6,
+      "failed": 0,
+      "log": "outputs/drill_01.log"
+    },
+    {
+      "id": "02",
+      "name": "single validator ML-DSA-65 key compromise",
+      "status": "PASS",
+      "checks": 7,
+      "passed": 7,
+      "failed": 0,
+      "log": "outputs/drill_02.log"
+    },
+    {
+      "id": "03",
+      "name": "quorum-member compromise (k of 35)",
+      "status": "PASS",
+      "checks": 8,
+      "passed": 8,
+      "failed": 0,
+      "log": "outputs/drill_03.log"
+    },
+    {
+      "id": "04",
+      "name": "bridge-witness compromise",
+      "status": "PASS",
+      "checks": 6,
+      "passed": 6,
+      "failed": 0,
+      "log": "outputs/drill_04.log"
+    },
+    {
+      "id": "05",
+      "name": "emergency rotation drill",
+      "status": "PASS",
+      "checks": 6,
+      "passed": 6,
+      "failed": 0,
+      "log": "outputs/drill_05.log"
+    },
+    {
+      "id": "06",
+      "name": "revocation drill (manifest max-uint32 sequence)",
+      "status": "PASS",
+      "checks": 8,
+      "passed": 8,
+      "failed": 0,
+      "log": "outputs/drill_06.log"
+    },
+    {
+      "id": "07",
+      "name": "validator-set recovery drill",
+      "status": "PASS",
+      "checks": 17,
+      "passed": 17,
+      "failed": 0,
+      "log": "outputs/drill_07.log"
+    },
+    {
+      "id": "08",
+      "name": "ledger re-sync drill",
+      "status": "PASS",
+      "checks": 6,
+      "passed": 6,
+      "failed": 0,
+      "log": "outputs/drill_08.log"
+    },
+    {
+      "id": "09",
+      "name": "amendment-state verification drill",
+      "status": "PASS",
+      "checks": 8,
+      "passed": 8,
+      "failed": 0,
+      "log": "outputs/drill_09.log"
+    }
+  ],
+  "total_checks": 72,
+  "total_passed": 72,
+  "total_failed": 0,
+  "overall": "PASS"
+}

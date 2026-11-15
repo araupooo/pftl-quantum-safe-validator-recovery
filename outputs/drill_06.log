@@ -1,0 +1,16 @@
+DRILL 06: revocation drill (manifest max-uint32 sequence)
+SIMULATED — no live network touched, no real keys used.
+Time model: ledger-close=4s, alert=8s, operator-ack=900s (assumed)
+[PASS] max uint32 is 4294967295 — 2**32-1
+[PASS] sequence 4294967295 is revoked — XLS-0045
+[PASS] sequence 4294967294 is NOT revoked — one below max is an ordinary sequence
+[PASS] sequence 0 is NOT revoked — initial sequence
+[PASS] sequence 1 is NOT revoked — ordinary sequence
+PHASE detection: 908 s simulated
+PHASE revocation: publish max-sequence manifest: 300 s simulated
+PHASE propagation to peers: 20 s simulated
+SIMULATED time to revocation published: 1228 s (0.34 h)
+[PASS] revocation published within 24 h simulated (CA/B Forum BR §4.9.1.1 target) — total=1228 s
+[PASS] revoked master key unseats its ephemeral key — ManifestCache, Manifest.cpp
+[PASS] revocation is permanent: no sequence above max exists — max uint32 cannot be exceeded, so no rollback past revocation
+RESULT 06: 8/8 checks passed, 0 failed

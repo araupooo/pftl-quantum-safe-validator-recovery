@@ -1,0 +1,20 @@
+DRILL 03: quorum-member compromise (k of 35)
+SIMULATED — no live network touched, no real keys used.
+Time model: ledger-close=4s, alert=8s, operator-ack=900s (assumed)
+CASE k=1 compromised: remaining=34, quorum-holds=True, chain=CONTINUES
+[PASS] k=1: quorum holds, chain continues — remaining=34 >= q=24
+CASE k=5 compromised: remaining=30, quorum-holds=True, chain=CONTINUES
+[PASS] k=5: quorum holds, chain continues — remaining=30 >= q=24
+CASE k=11 compromised: remaining=24, quorum-holds=True, chain=CONTINUES
+[PASS] k=11: quorum holds, chain continues — remaining=24 >= q=24
+CASE k=12 compromised: remaining=23, quorum-holds=False, chain=HALTS
+[PASS] k=12: quorum lost, chain halts (does not lower q) — remaining=23 < q=24
+CASE k=24 compromised: remaining=11, quorum-holds=False, chain=HALTS
+[PASS] k=24: quorum lost, chain halts (does not lower q) — remaining=11 < q=24
+[PASS] halt boundary is exactly k=12 (35-12=23 < 24) — boundary verified
+[PASS] single-member compromise never halts — remaining=34
+PHASE detection of k=11 case: 908 s simulated
+PHASE recovery: rotate 11 members one at a time, quorum never breached: 39600 s simulated
+SIMULATED total recovery time (k=11, sequential rotation): 40508 s (11.25 h)
+[PASS] sequential rotation keeps >= 24 validators signing at every step — one offline at a time
+RESULT 03: 8/8 checks passed, 0 failed

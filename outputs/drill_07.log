@@ -1,0 +1,25 @@
+DRILL 07: validator-set recovery drill
+SIMULATED — no live network touched, no real keys used.
+Time model: ledger-close=4s, alert=8s, operator-ack=900s (assumed)
+[PASS] starting state: 11 compromised, 24 remain, quorum exactly met — 35-11=24=q
+[PASS] rotation step 1: honest signers stay at q=24 — honest=24
+[PASS] rotation step 2: honest signers stay at q=24 — honest=24
+[PASS] rotation step 3: honest signers stay at q=24 — honest=24
+[PASS] rotation step 4: honest signers stay at q=24 — honest=24
+[PASS] rotation step 5: honest signers stay at q=24 — honest=24
+[PASS] rotation step 6: honest signers stay at q=24 — honest=24
+[PASS] rotation step 7: honest signers stay at q=24 — honest=24
+[PASS] rotation step 8: honest signers stay at q=24 — honest=24
+[PASS] rotation step 9: honest signers stay at q=24 — honest=24
+[PASS] rotation step 10: honest signers stay at q=24 — honest=24
+[PASS] rotation step 11: honest signers stay at q=24 — honest=24
+Rotations performed sequentially: 11
+[PASS] all 11 compromised members rotated, one at a time — steps=11
+[PASS] after recovery, 35 honest validators, quorum holds — remaining=35
+[PASS] registry transition requires cross-registry check (PROPOSED gate) — whitepaper §1.9: local-row checks alone are insufficient
+[PASS] old-rule authorizations forbidden after activation (PROPOSED gate) — whitepaper §1.9
+[PASS] no authority retroactively alters certificate thresholds — whitepaper §1.9
+PHASE recovery: 11 sequential rotations: 39600 s simulated
+PHASE verification: full set signs a test ledger: 40 s simulated
+SIMULATED total set-recovery time: 39640 s (11.01 h)
+RESULT 07: 17/17 checks passed, 0 failed

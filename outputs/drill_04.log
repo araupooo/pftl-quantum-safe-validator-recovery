@@ -1,0 +1,15 @@
+DRILL 04: bridge-witness compromise
+SIMULATED — no live network touched, no real keys used.
+Time model: ledger-close=4s, alert=8s, operator-ack=900s (assumed)
+PHASE detection: anomalous witness attestation: 908 s simulated
+PHASE containment: freeze bridge-witness attestations from suspect witness: 1800 s simulated
+PHASE rotation: new ML-DSA-65 witness key, new domain-separated context: 3600 s simulated
+PHASE recovery verification: attestations resume under new key: 80 s simulated
+SIMULATED total recovery time: 6388 s (1.77 h)
+[PASS] witness key is ML-DSA-65 (1952-byte public key) — whitepaper §1.11
+[PASS] compromised witness key moved to Compromised, never reused — SP 800-57 §7/§8
+[PASS] replacement is independent re-keying — SP 800-57 §8.2.3
+[PASS] bridge attestations from old key rejected after rotation (PROPOSED) — domain-separated context changes with the key
+[PASS] validator quorum unaffected by single-witness compromise — witness set is separate from the 35-validator set (PROPOSED separation)
+[PASS] no bridge procedure is claimed as whitepaper-stated — whitepaper names witnesses only as a signing context — see limitations.md
+RESULT 04: 6/6 checks passed, 0 failed
