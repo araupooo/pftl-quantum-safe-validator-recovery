@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PFTL Quantum-Safe Validator Recovery Playbook</title>
+<style>
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;max-width:900px;margin:2em auto;padding:0 1em;line-height:1.55;color:#111}
+h1{font-size:1.7em}h2{border-bottom:1px solid #ccc;padding-bottom:.2em}
+code{background:#f2f2f2;padding:0 .3em;border-radius:3px}
+pre{background:#f6f6f6;padding:1em;overflow:auto}
+table{border-collapse:collapse;width:100%}th,td{border:1px solid #ccc;padding:.4em .6em;text-align:left}
+.warn{background:#fff4d6;border:1px solid #d9a400;padding:1em}
+.sim{background:#eef6ff;border:1px solid #4a90d9;padding:1em}
+</style>
+</head>
+<body>
+<h1>PFTL Quantum-Safe Validator Recovery Playbook</h1>
+<p><strong>Rendered playbook — mirrors <code>findings.md</code>.</strong>
+Static, self-contained page; no external assets.</p>
+<div class="warn"><strong>Status.</strong> Every procedure in this playbook is
+<strong>PROPOSED</strong>. No published PFTL disaster-recovery runbook or
+key-compromise procedure exists: the PostFiat whitepaper contains no
+disaster-recovery, key-compromise, amendment, or revocation procedure, and
+no ML-DSA validator-key or rotation code was found in the postfiatd files
+checked. Procedures are built from primary sources (NIST, XRPL/rippled,
+postfiatd source, the whitepaper's Cobalt evidence, Cosmos, CA/B Forum),
+with the provenance of each step stated.</div>
+<div class="sim"><strong>All drills are SIMULATED.</strong> No live network was
+touched, no real keys were used. Timings use the model in
+<code>scripts/common.py</code> (ledger close 4&nbsp;s, alert 8&nbsp;s, operator
+acknowledgement 900&nbsp;s assumed). Simulated timings are not real-world
+measurements.</div>
+
+<h2>1. Scope and assumptions</h2>
+<p><strong>In scope:</strong> validator signing-key compromise (classical and
+ML-DSA-65), quorum-member compromise, bridge-witness compromise,
+validator-set recovery, ledger re-sync after compromise, and
+amendment-state verification.</p>
+<ul>
+<li><strong>A1.</strong> Validator set n = 35, quorum q = 24 (whitepaper §1.11, §1.9).
+The testnet reports 53 validators; the 35 figure is the whitepaper's quorum model.</li>
+<li><strong>A2.</strong> Validators sign with ML-DSA-65 from genesis (whitepaper §1.11).</li>
+<li><strong>A3.</strong> Operator acknowledgement 900&nbsp;s (15&nbsp;min) — an assumption, not a measurement.</li>
+<li><strong>A4.</strong> Ledger close 4&nbsp;s (XRPL ledgers close every ~3–5&nbsp;s; 4&nbsp;s is the midpoint).</li>
+<li><strong>A5.</strong> Bridge witnesses are a set separate from the 35 validators, signing with
+domain-separated ML-DSA-65 contexts. Witness set size and rotation rule are <strong>not stated</strong>
+in any source read — the bridge runbook is the most speculative part.</li>
+<li><strong>A6.</strong> Amendment verification uses the postfiatd fork rule (67% post-fix); the
+whitepaper states no amendment rule.</li>
+</ul>
+
+<h2>2. Grounded facts</h2>
+<table>
+<tr><th>Fact</th><th>Source</th></tr>
+<tr><td>ML-DSA-65: private 4,032 B, public 1,952 B, signature 3,309 B; categories 2/3/5</td><td>FIPS 204 §4 Table 1, Table 2 (PDF-verified)</td></tr>
+<tr><td>SLH-DSA: 12 parameter sets; e.g. SLH-DSA-128s: 32 B public key, 7,856 B signature</td><td>FIPS 205 Table 2 (CROSS-CHECKED)</td></tr>
+<tr><td>Key states; compromised key never returns to a previous phase; replacement is re-keying, never key update</td><td>SP 800-57 Rev. 5 §7, §8, §8.2.3</td></tr>
+<tr><td>Hybrid KEM guidance (§4.6) is KEM-scope only — not signature-hybrid authority</td><td>SP 800-227 Final, 18 Sep 2025, §4.6</td></tr>
+<tr><td>Manifest revocation = sequence max uint32 (4,294,967,295)</td><td>XLS-0045; postfiatd Manifest.cpp, commit 0085a1ff</td></tr>
+<tr><td>Amendment majority: postfiatd 67% post-fix vs 80% upstream; 2-week hold unchanged</td><td>postfiatd SystemParameters.h, commit 0085a1ff; xrpl.org</td></tr>
+<tr><td>Quorum q = 24 of 35; 24 × 3,309 = 79,416 signature bytes (DERIVED); loss of quorum halts the chain</td><td>Whitepaper §1.11, §1.9</td></tr>
+<tr><td>Height 924: legitimate rotation committed; stolen old key's attempt rejected</td><td>Whitepaper §1.9</td></tr>
+<tr><td>Ledger re-sync: fetch latest validated ledger, verify by hashes (LedgerHashes), backfill at low priority</td><td>xrpl.org Ledger History</td></tr>
+<tr><td>Key-compromise revocation within 24 hours</td><td>CA/B Forum BR §4.9.1.1 (CROSS-CHECKED)</td></tr>
+<tr><td>Cosmos: production ML-DSA validator rotation (SDK 0.55 / CometBFT 0.40); one rotation per unbonding period</td><td>Cosmos SDK docs</td></tr>
+<tr><td>Ethereum: no protocol-level validator signing-key rotation; exit and re-enter only</td><td>EthStaker docs (community docs)</td></tr>
+</table>
+
+<h2>3. Compromise scenarios</h2>
+<h3>3.1 Single validator signing-key compromise (classical)</h3>
+<p>Key moves to Compromised (SP 800-57 §7); validator isolated; new key generated
+independently (re-keying, §8.2.3); new manifest published. Quorum unaffected (34 remain).
+Drill 01: 6/6 checks, simulated recovery 6,348&nbsp;s. Runbook (a).</p>
+<h3>3.2 Single validator ML-DSA-65 key compromise</h3>
+<p>Same shape with ML-DSA-65 sizes; the rotation procedure is PROPOSED — no shipped
+ML-DSA rotation code exists in postfiatd. Height-924 precedent: legitimate rotation
+committed, stolen old key rejected. Drill 02: 7/7 checks, simulated recovery 6,388&nbsp;s.
+Runbook (a), <code>rotation.md</code>.</p>
+<h3>3.3 Quorum-member compromise</h3>
+<p>Boundary is exact: compromised ≥ 12 leaves fewer than 24 honest validators, and the
+chain halts rather than lowering q. k = 11 is the worst survivable case (24 remain).
+Recovery rotates members one at a time. Drill 03: 8/8; drill 07 (set recovery, k = 11):
+17/17, simulated recovery 39,640&nbsp;s. Runbooks (b) and (d).</p>
+<h3>3.4 Bridge-witness compromise</h3>
+<p>Witness frozen out of attestations, re-keyed under a new domain-separated context,
+re-admitted only after verification. Witness set size and quorum rule are unstated;
+this is the least grounded runbook. Drill 04: 6/6, simulated recovery 6,388&nbsp;s. Runbook (c).</p>
+
+<h2>4. Rotation, revocation, rollback protection</h2>
+<p>Full procedures in <code>rotation.md</code>. Headlines:</p>
+<ul>
+<li><strong>Classical-to-hybrid ML-DSA rotation</strong> (PROPOSED): offline ML-DSA-65 key generation,
+publish rotation authorization, verify the new key signs, retire the old key.</li>
+<li><strong>Emergency rotation:</strong> pre-generated standby key; drill 05: 6/6, simulated 668&nbsp;s (~11.1 min).</li>
+<li><strong>Revocation:</strong> manifest sequence 4,294,967,295; drill 06: 8/8, published 1,228&nbsp;s simulated
+after detection, within the 24-hour target.</li>
+<li><strong>Rollback protection:</strong> monotonic manifest sequences; compromised keys never re-activated;
+a rotation is undone only by a further rotation.</li>
+<li><strong>Quorum-safety gates:</strong> remaining honest validators ≥ 24 before, during, and after every step.</li>
+</ul>
+
+<h2>5. Recovery runbooks</h2>
+<table>
+<tr><th>Runbook</th><th>File</th><th>Drill</th></tr>
+<tr><td>(a) Validator signing-key compromise</td><td><code>runbooks/a-signing-key-compromise.md</code></td><td>01, 02</td></tr>
+<tr><td>(b) Quorum-member compromise</td><td><code>runbooks/b-quorum-member-compromise.md</code></td><td>03</td></tr>
+<tr><td>(c) Bridge-witness compromise</td><td><code>runbooks/c-bridge-witness-compromise.md</code></td><td>04</td></tr>
+<tr><td>(d) Validator-set recovery</td><td><code>runbooks/d-validator-set-recovery.md</code></td><td>07</td></tr>
+<tr><td>(e) Ledger re-sync after compromise</td><td><code>runbooks/e-ledger-resync.md</code></td><td>08</td></tr>
+<tr><td>(f) Amendment-state verification</td><td><code>runbooks/f-amendment-state-verification.md</code></td><td>09</td></tr>
+</table>
+<p>Each runbook follows: trigger, detection, containment, rotation/revocation, recovery,
+verification gates, rollback protection, quorum-safety gates — every step labelled PROPOSED
+with its provenance.</p>
+
+<h2>6. Amendment-state verification</h2>
+<p>The postfiatd fork changed the post-fix amendment majority from 80% to 67% (verified in
+source, commit 0085a1ff); the 2-week hold is unchanged. DERIVED for 35 trusted validators:
+postfiatd needs 24 votes (35 × 67/100 = 23.45; votes must exceed 23.45), upstream needs 29
+(35 × 80/100 = 28.00). The postfiatd <code>AmendmentTable.cpp</code> comment still says
+“slightly less than 80%” — a stale upstream comment; the code uses 67%. Drill 09 verifies
+all four boundary cases: 8/8 checks.</p>
+
+<h2>7. Measured drill results (SIMULATED)</h2>
+<table>
+<tr><th>Drill</th><th>Checks</th><th>Simulated recovery total</th></tr>
+<tr><td>01 classical compromise</td><td>6/6</td><td>6,348 s</td></tr>
+<tr><td>02 ML-DSA compromise</td><td>7/7</td><td>6,388 s</td></tr>
+<tr><td>03 quorum-member (k=11)</td><td>8/8</td><td>40,508 s</td></tr>
+<tr><td>04 bridge-witness</td><td>6/6</td><td>6,388 s</td></tr>
+<tr><td>05 emergency rotation</td><td>6/6</td><td>668 s</td></tr>
+<tr><td>06 revocation</td><td>8/8</td><td>1,228 s to publish</td></tr>
+<tr><td>07 set recovery (k=11)</td><td>17/17</td><td>39,640 s</td></tr>
+<tr><td>08 ledger re-sync</td><td>6/6</td><td>5,220 s</td></tr>
+<tr><td>09 amendment verification</td><td>8/8</td><td>60 s</td></tr>
+</table>
+<p><strong>Total: 72/72 checks passed, 0 failed.</strong> Logs in <code>outputs/</code>;
+summary in <code>outputs/run-summary.json</code>. Reproduce with
+<code>python3 -B scripts/run_all.py</code> (bounded: well under 5 minutes).</p>
+
+<h2>8. Limitations</h2>
+<p>All runbooks are proposals; no live-network testing; simulated timings are not real-world
+measurements; bridge-witness procedures are the least grounded; FIPS 205 Table 2 and CA/B
+Forum BR §4.9.1.1 are cross-checked, not read from the primary text in this pass; the
+postfiatd consensus (ledger-validation) quorum was not checked for fork differences.
+Full list: <code>limitations.md</code>.</p>
+</body>
+</html>

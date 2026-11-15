@@ -1,0 +1,40 @@
+# DIGESTS.txt — SHA-256 of every deterministic file in this pack.
+# Excluded: DIGESTS.txt itself; verification/fresh-clone-verification.log
+# (records a verification run performed from a copy in /tmp, not pack
+# content, and embeds that run's output).
+# All other files are deterministic: outputs/ logs and run-summary.json
+# contain no timestamps, wall-clock times, or randomness.
+260fa9b36406820a02aebe571fe89d1ef7bda758232b6b853fed25325ff3d0f8  ./README.md
+babd4dbd736593108717fcc71a35b1dbd6e48ba2a09726539e8d113f83647e9d  ./claims.md
+2b4f2b9e2ddf9a18f98d1d3e551da00c8300ac12fe2c088a80fdfb5e9c8ce554  ./findings.md
+ff42ca544a7adcc8582c46f5346daf0883f4eae10a28c1ad4deed213b49321e6  ./index.html
+d095df83bedd22af9f8f60c56118efa2008f07820ddd315fda5f926bdb64f2b8  ./limitations.md
+063efba55ff19c8055c033bcc1dab670e7f1d9c04e136035cd2d18daf941f2ef  ./outputs/drill_01.log
+c8f7bcce12d876db8a82011336ca471be7575015d1bc3e0e4ac00ca3ff46e837  ./outputs/drill_02.log
+229c400a50d740d5bbbb83cd18001e67168bc119d55987fadf3a7a76ad22eff0  ./outputs/drill_03.log
+16caa07bd9883aeaf58baaf48fa372d70277e666dbc75516be3b4436b0d9f9c2  ./outputs/drill_04.log
+95e7a6173001df78e6ccbddbb16c60b18acd5e81aa6b06a6872873bf90d50fcd  ./outputs/drill_05.log
+f5285c1b19809849d7b2ef27410bab117baa425f638847a27c6734a0c083d252  ./outputs/drill_06.log
+f11ed01e558b5b54413106ab6b6c6ef51e3b9d2629c1d193e6e9ee1d13478388  ./outputs/drill_07.log
+83f703f58ea32259a0d56445ec1a6ddffe44537159405006807fba1f837239bb  ./outputs/drill_08.log
+c704ceff46789917495fcdfb994d28bcdd5175687f7ae55092477f61cdc51a40  ./outputs/drill_09.log
+c072ebe88a850ff890b3b1c5416a0cdf3f55b7d002ee2cd2b09e8387d44f9ba7  ./outputs/run-summary.json
+532f22f97fa31155755e5570cc6c0fad4643d183cc39264de51e69fdadac2c5e  ./rotation.md
+e06ab14b31664ab07ec0cdb67a4b4c494326886366e756b05688080a2463995b  ./runbooks/a-signing-key-compromise.md
+85c4bb9d9acb6a9090d475f1be6fb2bc30230427e1efc782ff9033d93d7f4d68  ./runbooks/b-quorum-member-compromise.md
+3f9fc5fb981f676fae0e4cd24a5b9b922ee83f5a2ff1dd462f7daae735e2cb68  ./runbooks/c-bridge-witness-compromise.md
+80f9af07c506b56411babd397d9624ad39847b443ce76464dff377f17018a681  ./runbooks/d-validator-set-recovery.md
+2fa16aa385a0375ee148b6424c046dac2ac2b56a5fdc348c963012de312f40a7  ./runbooks/e-ledger-resync.md
+27632d4a3ca1bd6b82563d85cf11ca6e6a8470623a49e0a01a6fba8962358d51  ./runbooks/f-amendment-state-verification.md
+652d1539ed6eeacd4a8ee882f7625062f35c1d82bf484ef78c5542b3b9c8841b  ./scripts/common.py
+17def8875e2b70b006536b8344f19665040f7d963ca6aa1a9a5a7d3b370770ae  ./scripts/drill_01.py
+be02622ae43436df72516d42fc93038ac971882e46022a0d2ffcc340923f93f9  ./scripts/drill_02.py
+9ebe4c61e187e2ddc63cf3f8381ee9071f41d7f7ff3db50b78e89ae66ea6f93f  ./scripts/drill_03.py
+00c0910b4e576601d75845ddd2620ad22d2b44f9a2aa530b70244d9bd0277b8e  ./scripts/drill_04.py
+206927a12ee9d643ecfbed5a03e3b34247928d0ce6ff936afc3dd261de1c9b04  ./scripts/drill_05.py
+2b028b39185d504c04da3a77d59d38e1f8d7e9c30ce39188823be0263ce4a6fa  ./scripts/drill_06.py
+d8df3349597ce812a872e9ad6036eaf97e4c57e1f3b18503af594f6c9c2d9feb  ./scripts/drill_07.py
+2967b40541f62e1a603f3f67b05632183649ddda4b540a06cee5b0d6e09c663b  ./scripts/drill_08.py
+423b4a78fda66e1015b63b1cf2f5be1668dd93ae0cd842599bef1e651d8b3214  ./scripts/drill_09.py
+5cfc374c5a9ee7790ebbcfc2741ab5c9a06ba40ae59de3ca68925d2aadaa54be  ./scripts/run_all.py
+ac9e99398dcc28f1d88e18929ccb4551aba62007ff3d168848e758f7da13b75c  ./sources.md
